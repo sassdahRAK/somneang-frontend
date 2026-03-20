@@ -1,13 +1,151 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>somneang-frontend</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Somneang Music</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+ 
+<!-- HEADER -->
+<header>
+  <a class="logo" href="#">
+    <svg class="logo-icon" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="22" cy="22" r="22" fill="#7a00b0"/>
+      <path d="M16 14 C16 14 28 10 30 18 C32 26 20 30 18 26 C16 22 24 20 24 20" stroke="#ff80ff" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <circle cx="17" cy="27" r="3.5" fill="#ff40ff"/>
+      <path d="M24 20 L24 12" stroke="#ff80ff" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+    <span class="logo-text">Somneang</span>
+  </a>
+  <div class="search-bar">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#cc88ee" stroke-width="2.2" stroke-linecap="round">
+      <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+    </svg>
+    <input type="text" placeholder="Search for song, artists, albums...">
+  </div>
+</header>
+ 
+<!-- POPULAR SONGS -->
+<section class="songs-section">
+  <div class="section-title">Popular Songs</div>
+  <div class="songs-list">
+ 
+    <div class="song-row">
+      <span class="song-num">1</span>
+      <div class="song-thumb">
+        <div class="thumb-grad t1">⭐</div>
+      </div>
+      <div class="song-info">
+        <div class="song-title">Stayboy</div>
+        <div class="song-artist">The Weekend</div>
+      </div>
+      <div class="song-right">
+        <button class="heart-btn" onclick="toggleLike(this)">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+        </button>
+        <span class="song-duration">3:57</span>
+      </div>
+    </div>
+ 
+    <div class="song-row">
+      <span class="song-num">2</span>
+      <div class="song-thumb">
+        <div class="thumb-grad t2">🎵</div>
+      </div>
+      <div class="song-info">
+        <div class="song-title">Perfect</div>
+        <div class="song-artist">Ed Sheeran</div>
+      </div>
+      <div class="song-right">
+        <button class="heart-btn" onclick="toggleLike(this)">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+        </button>
+        <span class="song-duration">4:23</span>
+      </div>
+    </div>
+ 
+    <div class="song-row">
+      <span class="song-num">3</span>
+      <div class="song-thumb">
+        <div class="thumb-grad t3">🎤</div>
+      </div>
+      <div class="song-info">
+        <div class="song-title">Love In The Dark</div>
+        <div class="song-artist">Adele</div>
+      </div>
+      <div class="song-right">
+        <button class="heart-btn" onclick="toggleLike(this)">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+        </button>
+        <span class="song-duration">4:45</span>
+      </div>
+    </div>
+ 
+    <div class="song-row">
+      <span class="song-num">4</span>
+      <div class="song-thumb">
+        <div class="thumb-grad t4">🎧</div>
+      </div>
+      <div class="song-info">
+        <div class="song-title">SOLO</div>
+        <div class="song-artist">Vanda</div>
+      </div>
+      <div class="song-right">
+        <button class="heart-btn" onclick="toggleLike(this)">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+        </button>
+        <span class="song-duration">3:09</span>
+      </div>
+    </div>
+ 
+    <div class="show-more">
+      <button id="show-more-btn" onclick="toggleShowMore()">
+        <svg id="show-more-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+    </div>
+ 
+  </div>
+</section>
+ 
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <div class="nav-item active" onclick="setActive(this)">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+    </svg>
+    Home
+  </div>
+  <div class="nav-item" onclick="setActive(this)">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+    </svg>
+    Search
+  </div>
+  <div class="nav-item" onclick="setActive(this)">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+    </svg>
+    Favorites
+  </div>
+  <div class="nav-item" onclick="setActive(this)">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+    </svg>
+    Account
+  </div>
+</nav>
+ 
+<script src="script.js"></script>
+</body>
 </html>
