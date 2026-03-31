@@ -1,0 +1,113 @@
+body {
+  margin: 0;
+  overflow-x: hidden;
+}
+
+.container {
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #5b0a8c, #8e2de2);
+  color: white;
+  font-family: Arial, sans-serif;
+  padding-bottom: 70px;
+  min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden; /* 🔥 add this */
+}
+
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 20px;
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.search-bar {
+  flex: 1;
+  padding: 10px 15px;
+  border-radius: 20px;
+  border: none;
+  outline: none;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.search-bar::placeholder {
+  color: #ddd;
+}
+
+.title {
+  padding: 0 20px;
+  margin-top: 10px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  padding: 20px;
+}
+
+.card {
+  background: rgba(248, 196, 196, 0.1);
+  border-radius: 15px;
+  overflow: hidden;
+  text-align: center;
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+.card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.card p {
+  padding: 10px 0;
+  font-weight: bold;
+}
+
+.navbar {
+  position: fixed;
+  bottom: 0;
+
+  /* Match however your container is centered */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;           /* or match your container's exact width */
+  max-width: 1125px;     /* 👈 adjust this to match your .container width */
+
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-around;
+  background: #3b0764;
+  padding: 10px 0 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 12px;
+  color: #ccc;
+}
+
+.nav-item svg {
+  margin-bottom: 5px;
+  width: 20px;
+  height: 20px;
+}
+
+.nav-item.active {
+  color: yellow;
+}
+
