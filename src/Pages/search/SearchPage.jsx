@@ -1,7 +1,7 @@
 import React from "react";
 import "./SearchPage.css";
-import { FaHome, FaSearch, FaHeart, FaUser } from "react-icons/fa";
 import rock from "../../assets/rock.jpg";
+import BottomNav from "../../components/BottomNav";
 
 export default function SearchPage() {
   const genres = [
@@ -41,26 +41,7 @@ export default function SearchPage() {
         ))}
       </div>
 
-      {/* NAVBAR */}
-      <div className="navbar">
-        <div className="nav-item">
-          <FaHome />
-          <span>Home</span>
-        </div>
-        <div className="nav-item active">
-          <FaSearch />
-          <span>Search</span>
-        </div>
-        <div className="nav-item">
-          <FaHeart />
-          <span>Favorites</span>
-        </div>
-        <div className="nav-item">
-          <FaUser />
-          <span>Account</span>
-        </div>
-      </div>
+      <BottomNav />
     </div>
   );
 }
-
