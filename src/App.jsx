@@ -5,6 +5,9 @@ import HomePage from "./Pages/home/HomePage";
 import SearchPage from "./Pages/search/SearchPage";
 import FavoritesPage from "./Pages/favorites/FavoritesPage";
 import AccountPage from "./Pages/account/AccountPage";
+import EditProfilePage from "./Pages/account/EditProfilePage";
+import SettingsPage from "./Pages/account/SettingsPage";
+import ChangePasswordPage from "./Pages/account/ChangePasswordPage";
 import ForgotPasswordPage from "./Pages/auth/ForgotPasswordPage";
 import VerifyCodePage from "./Pages/auth/VerifyCodePage";
 import NewPasswordPage from "./Pages/auth/NewPasswordPage";
@@ -23,6 +26,12 @@ function App() {
         <Route path="/search" element={<SearchPage />} />
         <Route path="/favorites" element={<FavoritesPage />} />
         <Route path="/account" element={<AccountPage />} />
+        <Route path="/account/edit-profile" element={<EditProfilePage />} />
+        <Route path="/account/settings" element={<SettingsPage />} />
+        <Route
+          path="/account/change-password"
+          element={<ChangePasswordPage />}
+        />
         <Route path="*" element={<Navigate to="/home" replace />} />
       </Routes>
     </BrowserRouter>

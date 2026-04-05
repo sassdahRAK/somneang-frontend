@@ -1,102 +1,80 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function LoginPage() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [showPassword, setShowPassword] = useState(false)
-  const navigate = useNavigate()
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  const canSubmit = useMemo(() => {
+    return email.trim().length > 3 && password.trim().length > 0;
+  }, [email, password]);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (!canSubmit) {
+      return;
+    }
+
+    const baseName = email.includes("@") ? email.split("@")[0] : email;
+    const displayName =
+      baseName
+        .split(/[._-]/)
+        .filter(Boolean)
+        .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+        .join(" ") || "Tena";
+
+    window.localStorage.setItem(
+      "accountData",
+      JSON.stringify({
+        name: displayName,
+        email: email.trim(),
+        favoriteSongs: 3,
+        playlists: 4,
+        listeningHours: 120,
+        avatarUrl: "",
+      }),
+    );
+
+    navigate("/home");
+  };
 
   return (
-    <div style={{
-      minHeight: '100vh',
-      background: 'linear-gradient(to bottom, #4a0080, #9b30d0)',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      fontFamily: 'sans-serif'
-    }}>
-      {/* Logo */}
-      <div style={{ marginBottom: '12px', fontSize: '48px' }}>🎵</div>
-      <h1 style={{ color: 'white', fontSize: '28px', marginBottom: '4px' }}>Welcome</h1>
-      <p style={{ color: '#ddd', marginBottom: '24px' }}>Log in to Continue to Somneang</p>
-
-      {/* Card */}
-      <div style={{
-        background: 'rgba(60, 0, 100, 0.7)',
-        borderRadius: '16px',
-        padding: '32px',
-        width: '100%',
-        maxWidth: '440px'
-      }}>
-        {/* Email */}
-        <label style={{ color: 'white', fontWeight: 'bold', display: 'block', marginBottom: '8px' }}>Email</label>
+    <div
+      style={{
+        minHeight: "100vh",
+        display: "grid",
+        placeItems: "center",
+        padding: 16,
+      }}
+    >
+      <form
+        onSubmit={handleSubmit}
+        style={{ width: "min(420px, 100%)", display: "grid", gap: 10 }}
+      >
+        <h1 style={{ margin: 0 }}>Login</h1>
         <input
           type="email"
-          placeholder="Enter your email"
+          placeholder="Email"
           value={email}
-          onChange={e => setEmail(e.target.value)}
-          style={{
-            width: '100%', padding: '12px 16px', borderRadius: '8px',
-            border: 'none', background: 'rgba(255,255,255,0.15)',
-            color: 'white', marginBottom: '16px', boxSizing: 'border-box', fontSize: '14px'
-          }}
+          onChange={(event) => setEmail(event.target.value)}
+          required
+          style={{ height: 42, padding: "0 12px" }}
         />
-
-        {/* Password */}
-        <label style={{ color: 'white', fontWeight: 'bold', display: 'block', marginBottom: '8px' }}>Password</label>
-        <div style={{ position: 'relative', marginBottom: '20px' }}>
-          <input
-            type={showPassword ? 'text' : 'password'}
-            placeholder="Enter your password"
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-            style={{
-              width: '100%', padding: '12px 40px 12px 16px', borderRadius: '8px',
-              border: 'none', background: 'rgba(255,255,255,0.15)',
-              color: 'white', boxSizing: 'border-box', fontSize: '14px'
-            }}
-          />
-          <span
-            onClick={() => setShowPassword(!showPassword)}
-            style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', cursor: 'pointer', color: '#ccc' }}
-          >
-            {showPassword ? '🙈' : '👁️'}
-          </span>
-        </div>
-
-        {/* Login Button */}
-        <button
-          onClick={() => navigate('/home')}
-          style={{
-            width: '100%', padding: '14px', borderRadius: '30px',
-            border: 'none', background: 'rgba(255,255,255,0.25)',
-            color: 'white', fontWeight: 'bold', fontSize: '16px',
-            cursor: 'pointer', marginBottom: '12px'
-          }}
-        >
-          Log in
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(event) => setPassword(event.target.value)}
+          required
+          style={{ height: 42, padding: "0 12px" }}
+        />
+        <button type="submit" disabled={!canSubmit} style={{ height: 42 }}>
+          Continue
         </button>
-
-        {/* Forgot password */}
-        <p style={{ textAlign: 'center', color: '#f5a623', cursor: 'pointer', marginBottom: '16px' }}
-           onClick={() => navigate('/forgot-password')}>
-          Forgot password?
-        </p>
-
-        <div style={{ textAlign: 'center', color: '#ccc' }}>— or —</div>
-
-        <p style={{ textAlign: 'center', color: '#ccc', marginTop: '16px' }}>
-          Don't have an account?{' '}
-          <span style={{ color: '#f5a623', fontWeight: 'bold', cursor: 'pointer' }}
-                onClick={() => navigate('/signup')}>
-            Sign Up
-          </span>
-        </p>
-      </div>
+      </form>
     </div>
-  )
+  );
 }
 
-export default LoginPage
+export default LoginPage;
