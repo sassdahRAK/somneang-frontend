@@ -1,7 +1,6 @@
 import { useMemo, useState } from "react";
 import { FaEnvelope, FaEye, FaEyeSlash, FaLock } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import appLogo from "../../assets/download (2).png";
 import "./LoginPage.css";
 
 function LoginPage() {
@@ -60,7 +59,7 @@ function LoginPage() {
 
       <section className="login-card">
         <div className="login-logo-wrap" aria-hidden="true">
-          <img src={appLogo} alt="" className="login-logo" />
+          <img src="/logo-transparent.png" alt="" className="login-logo" />
         </div>
         <p className="login-badge">Somneang</p>
         <h1 className="login-title">Welcome Back</h1>
