@@ -348,7 +348,8 @@
 .account-profile-modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.72);
+  background: rgba(26, 0, 43, 0.72);
+  backdrop-filter: blur(2px);
   display: grid;
   place-items: center;
   padding: 20px;
@@ -357,13 +358,15 @@
 
 .account-profile-modal {
   width: min(560px, 100%);
-  background: #2a2a2a;
+  background: linear-gradient(160deg, #3f145f 0%, #55207c 55%, #4c1770 100%);
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 210, 74, 0.24);
   padding: 24px;
   position: relative;
   color: #fff;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+  box-shadow:
+    0 24px 64px rgba(14, 0, 25, 0.52),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 
 .account-profile-modal-close {
@@ -372,10 +375,14 @@
   right: 12px;
   border: none;
   background: transparent;
-  color: rgba(255, 255, 255, 0.72);
+  color: rgba(255, 240, 255, 0.86);
   cursor: pointer;
   font-size: 1.15rem;
   padding: 4px;
+}
+
+.account-profile-modal-close:hover {
+  color: #ffd85a;
 }
 
 .account-profile-modal-title {
@@ -386,8 +393,9 @@
 
 .account-profile-modal-body {
   margin-top: 22px;
-  display: flex;
-  align-items: center;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
   gap: 18px;
 }
 
@@ -427,41 +435,55 @@
 }
 
 .account-profile-modal-controls {
-  flex: 1;
-  display: grid;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
   gap: 10px;
 }
 
 .account-profile-modal-name {
+  width: 100%;
   height: 52px;
-  border-radius: 6px;
-  border: none;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
   outline: none;
   padding: 0 14px;
   font-family: inherit;
   font-size: 1.15rem;
-  background: #444;
+  background: rgba(16, 0, 30, 0.35);
   color: #fff;
 }
 
+.account-profile-modal-name:focus {
+  border-color: rgba(255, 216, 90, 0.88);
+  box-shadow: 0 0 0 3px rgba(255, 216, 90, 0.14);
+}
+
 .account-profile-modal-save {
-  justify-self: end;
+  align-self: flex-end;
   border: none;
   border-radius: 999px;
   min-width: 118px;
   height: 50px;
   padding: 0 20px;
-  background: #fff;
-  color: #111;
+  background: linear-gradient(135deg, #ffe86f 0%, #ffc941 100%);
+  color: #311b05;
   font-size: 1.22rem;
   font-weight: 700;
   font-family: inherit;
   cursor: pointer;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.account-profile-modal-save:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.04);
 }
 
 .account-profile-modal-note {
   margin: 18px 0 0;
-  color: rgba(255, 255, 255, 0.86);
+  color: rgba(247, 226, 255, 0.88);
   font-size: 0.95rem;
   line-height: 1.45;
   max-width: 95%;
@@ -474,7 +496,8 @@
   }
 
   .account-profile-modal-body {
-    align-items: flex-start;
+    grid-template-columns: 152px minmax(0, 1fr);
+    align-items: start;
     gap: 14px;
   }
 
@@ -511,7 +534,7 @@
   }
 
   .account-profile-modal-body {
-    flex-direction: column;
+    grid-template-columns: 1fr;
     align-items: center;
     margin-top: 14px;
   }
@@ -523,17 +546,39 @@
 
   .account-profile-modal-controls {
     width: 100%;
+    gap: 8px;
   }
 
   .account-profile-modal-save {
     width: 100%;
-    justify-self: stretch;
+    align-self: stretch;
   }
 
   .account-profile-modal-note {
     margin-top: 14px;
     max-width: 100%;
     font-size: 0.86rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .account-profile-modal-body {
+    align-items: stretch;
+  }
+
+  .account-profile-modal-avatar-wrap {
+    align-self: center;
+  }
+
+  .account-profile-modal-name {
+    height: 44px;
+    font-size: 0.95rem;
+  }
+
+  .account-profile-modal-save {
+    width: 100%;
+    height: 44px;
+    font-size: 1rem;
   }
 }
 
@@ -589,13 +634,13 @@
   }
 
   .account-profile-modal-body {
-    flex-direction: column;
-    align-items: flex-start;
+    grid-template-columns: 1fr;
+    align-items: center;
   }
 
   .account-profile-modal-avatar {
-    width: 140px;
-    height: 140px;
+    width: 124px;
+    height: 124px;
   }
 
   .account-profile-modal-controls {
@@ -604,6 +649,6 @@
 
   .account-profile-modal-save {
     width: 100%;
-    justify-self: stretch;
+    align-self: stretch;
   }
 }
