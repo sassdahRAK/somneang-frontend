@@ -3,6 +3,7 @@ import { Outlet } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import Navbar from '../components/Navbar';
 import Player from '../components/Player';
+import Toast from '../components/Toast';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 
@@ -58,6 +59,8 @@ export default function MainLayout() {
 
       {/* Player */}
       <Player />
+      {/* Toast notifications */}
+      <Toast />
     </div>
   );
 }

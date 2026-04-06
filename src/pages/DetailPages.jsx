@@ -2,7 +2,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Play, BadgeCheck, Music, Heart, Users, Disc } from 'lucide-react';
 import { motion } from 'framer-motion';
 import SongCard from '../components/SongCard';
-import { artists, songs, playlists } from '../data/mockData';
+import StarRating from '../components/StarRating';
+import { artists, playlists } from '../data/mockData';
 import { useApp } from '../context/AppContext';
 
 function BackButton() {
@@ -19,7 +20,7 @@ function BackButton() {
 export function ArtistDetail() {
   const { id } = useParams();
   const artist = artists.find(a => a.id === Number(id));
-  const { playSong } = useApp();
+  const { playSong, songs } = useApp();
   if (!artist) return <div className="p-7 text-slate-400">Artist not found</div>;
 
   const artistSongs = songs.filter(s => artist.songs.includes(s.id));
@@ -72,19 +73,25 @@ export function ArtistDetail() {
 
 export function SongDetail() {
   const { id } = useParams();
+  const { playSong, toggleLike, likedSongs, isPlaying, currentSong, songs, addNotification } = useApp();
   const song = songs.find(s => s.id === Number(id));
-  const { playSong, toggleLike, likedSongs, isPlaying, currentSong } = useApp();
   if (!song) return <div className="p-7 text-slate-400">Song not found</div>;
 
   const isLiked = likedSongs.has(song.id);
   const isCurrentPlaying = currentSong?.id === song.id && isPlaying;
   const related = songs.filter(s => s.artistId === song.artistId && s.id !== song.id).slice(0, 5);
 
+  const handleToggleLike = () => {
+    toggleLike(song.id);
+    if (!isLiked) addNotification(`Added "${song.title}" to your favorites!`);
+  };
+
   return (
     <div className="p-5 md:p-7">
       <BackButton />
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-2xl">
-        <div className="flex flex-col sm:flex-row gap-6 mb-8">
+        <div className="flex flex-col sm:flex-row gap-6 mb-6">
+          {/* Album art */}
           <div className="relative flex-shrink-0">
             <img src={song.image} alt={song.title}
               className={`w-48 h-48 rounded-3xl object-cover shadow-2xl mx-auto sm:mx-0 ${isCurrentPlaying ? 'spin-slow' : ''}`}
@@ -93,6 +100,8 @@ export function SongDetail() {
               <div className="absolute inset-0 rounded-3xl border-2 border-pink-500/50 pulse-glow" />
             )}
           </div>
+
+          {/* Song info */}
           <div className="flex flex-col justify-center">
             <div className="flex items-center gap-2 mb-1">
               <Disc size={14} className="text-purple-400" />
@@ -100,26 +109,35 @@ export function SongDetail() {
             </div>
             <h1 className="font-display font-bold text-3xl text-white mb-1">{song.title}</h1>
             <p className="text-slate-300 mb-1">{song.artist}</p>
-            <div className="flex items-center gap-3 text-xs text-slate-500 mb-5">
+            <div className="flex items-center gap-3 text-xs text-slate-500 mb-4">
               <span>{song.plays} plays</span>
               <span>·</span>
               <span>{song.duration}</span>
             </div>
-            <div className="flex items-center gap-3">
+
+            {/* Play + Like buttons */}
+            <div className="flex items-center gap-3 mb-5">
               <motion.button whileTap={{ scale: 0.95 }}
                 onClick={() => playSong(song)}
                 className="flex items-center gap-2 gradient-bg px-7 py-3 rounded-full text-white font-semibold shadow-lg hover:opacity-90">
                 <Play size={18} className="ml-0.5" />
                 {isCurrentPlaying ? 'Playing' : 'Play'}
               </motion.button>
-              <motion.button whileTap={{ scale: 0.9 }} onClick={() => toggleLike(song.id)}
+              <motion.button whileTap={{ scale: 0.9 }} onClick={handleToggleLike}
                 className="w-11 h-11 glass-card rounded-full flex items-center justify-center hover:border-pink-500/30 transition-all">
                 <Heart size={18} className={isLiked ? 'fill-pink-500 text-pink-500' : 'text-slate-400 hover:text-pink-400'} />
               </motion.button>
             </div>
+
+            {/* Star rating */}
+            <div>
+              <p className="text-xs text-slate-400 mb-2">Rate this song</p>
+              <StarRating songId={song.id} />
+            </div>
           </div>
         </div>
 
+        {/* Related songs */}
         {related.length > 0 && (
           <>
             <h2 className="font-display font-bold text-lg text-white mb-3">More by {song.artist}</h2>
@@ -141,7 +159,7 @@ export function SongDetail() {
 export function PlaylistDetail() {
   const { id } = useParams();
   const playlist = playlists.find(p => p.id === Number(id));
-  const { playSong } = useApp();
+  const { playSong, songs } = useApp();
   if (!playlist) return <div className="p-7 text-slate-400">Playlist not found</div>;
 
   const playlistSongs = songs.filter(s => playlist.songs.includes(s.id));

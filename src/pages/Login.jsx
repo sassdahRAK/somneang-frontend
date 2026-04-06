@@ -1,25 +1,53 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, Mail, Lock, ArrowRight } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, ArrowRight, AlertCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useAuth } from '../context/AuthContext';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPw, setShowPw] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setError('');
     setLoading(true);
-    setTimeout(() => { setLoading(false); navigate('/home'); }, 1200);
+
+    // Small delay for UX feel
+    setTimeout(() => {
+      const result = login(email, password);
+      setLoading(false);
+      if (result.error) {
+        setError(result.error);
+      } else {
+        // Admin goes to admin dashboard, users go to home
+        navigate(result.user.role === 'admin' ? '/admin' : '/home');
+      }
+    }, 800);
   };
 
   return (
     <>
       <h2 className="font-display font-bold text-2xl text-white mb-1">Welcome back</h2>
       <p className="text-slate-400 text-sm mb-6">Sign in to continue to Somneang</p>
+
+      {/* Demo credentials hint */}
+      <div className="mb-4 p-3 rounded-xl bg-purple-500/10 border border-purple-500/20 text-xs text-purple-300">
+        <strong>Admin:</strong> admin@somneang.app / admin123
+      </div>
+
+      {/* Error message */}
+      {error && (
+        <motion.div initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }}
+          className="mb-4 flex items-center gap-2 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+          <AlertCircle size={15} /> {error}
+        </motion.div>
+      )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
@@ -55,11 +83,9 @@ export default function Login() {
           disabled={loading}
           className="w-full gradient-bg py-3 rounded-xl text-white font-semibold text-sm flex items-center justify-center gap-2 hover:opacity-90 transition-opacity shadow-lg"
         >
-          {loading ? (
-            <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-          ) : (
-            <><span>Sign In</span><ArrowRight size={16} /></>
-          )}
+          {loading
+            ? <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            : <><span>Sign In</span><ArrowRight size={16} /></>}
         </motion.button>
       </form>
 

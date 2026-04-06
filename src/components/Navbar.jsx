@@ -1,35 +1,54 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, User, Sun, Moon, Menu, X, Bell } from 'lucide-react';
+import { Search, Sun, Moon, Menu, Bell } from 'lucide-react';
 import { useApp } from '../context/AppContext';
-import { songs, artists } from '../data/mockData';
+import { useAuth } from '../context/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
+import { NotificationPanel } from './Toast';
 
 export default function Navbar({ onMenuClick }) {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
-  const { darkMode, setDarkMode } = useApp();
+  const [showNotifs, setShowNotifs] = useState(false);
+  const { darkMode, setDarkMode, songs, notifications } = useApp();
+  const { currentUser } = useAuth();
   const navigate = useNavigate();
+  const notifsRef = useRef(null);
+
+  const unreadCount = notifications.filter(n => !n.read).length;
+
+  // Close notification panel when clicking outside
+  useEffect(() => {
+    function handleClick(e) {
+      if (notifsRef.current && !notifsRef.current.contains(e.target)) {
+        setShowNotifs(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, []);
 
   const handleSearch = (q) => {
     setQuery(q);
     if (!q.trim()) { setResults([]); return; }
+
+    // Search songs and group by type
     const songResults = songs.filter(s =>
       s.title.toLowerCase().includes(q.toLowerCase()) ||
       s.artist.toLowerCase().includes(q.toLowerCase())
-    ).slice(0, 4);
-    const artistResults = artists.filter(a =>
-      a.name.toLowerCase().includes(q.toLowerCase())
-    ).slice(0, 2);
-    setResults([...songResults.map(s => ({ ...s, type: 'song' })), ...artistResults.map(a => ({ ...a, type: 'artist' }))]);
+    ).slice(0, 5);
+
+    setResults(songResults.map(s => ({ ...s, type: 'song' })));
   };
 
   const handleSelect = (item) => {
     setQuery('');
     setResults([]);
-    if (item.type === 'song') navigate(`/song/${item.id}`);
-    else navigate(`/artist/${item.id}`);
+    navigate(`/song/${item.id}`);
   };
+
+  // Get avatar letter from user name
+  const avatarLetter = currentUser?.name?.[0]?.toUpperCase() || 'U';
 
   return (
     <header className="sticky top-0 z-40 glass border-b border-purple-900/20 px-4 md:px-6 py-3 flex items-center gap-4">
@@ -38,7 +57,7 @@ export default function Navbar({ onMenuClick }) {
         <Menu size={22} />
       </button>
 
-      {/* Search */}
+      {/* Search bar */}
       <div className="flex-1 relative max-w-md">
         <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
         <input
@@ -58,16 +77,16 @@ export default function Navbar({ onMenuClick }) {
             >
               {results.map(item => (
                 <div
-                  key={`${item.type}-${item.id}`}
+                  key={item.id}
                   onClick={() => handleSelect(item)}
                   className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 cursor-pointer transition-colors"
                 >
                   <img src={item.image} alt="" className="w-8 h-8 rounded-lg object-cover" />
                   <div>
-                    <p className="text-sm text-white font-medium">{item.title || item.name}</p>
-                    <p className="text-xs text-slate-400">{item.type === 'song' ? item.artist : item.genre}</p>
+                    <p className="text-sm text-white font-medium">{item.title}</p>
+                    <p className="text-xs text-slate-400">{item.artist}</p>
                   </div>
-                  <span className="ml-auto text-xs text-purple-400 capitalize">{item.type}</span>
+                  <span className="ml-auto text-xs text-purple-400">Song</span>
                 </div>
               ))}
             </motion.div>
@@ -76,23 +95,43 @@ export default function Navbar({ onMenuClick }) {
       </div>
 
       <div className="flex items-center gap-2 ml-auto">
-        <button className="p-2 text-slate-400 hover:text-white hover:bg-white/5 rounded-full transition-colors">
-          <Bell size={18} />
-        </button>
+        {/* Notification bell */}
+        <div className="relative" ref={notifsRef}>
+          <button
+            onClick={() => setShowNotifs(s => !s)}
+            className="relative p-2 text-slate-400 hover:text-white hover:bg-white/5 rounded-full transition-colors"
+          >
+            <Bell size={18} />
+            {unreadCount > 0 && (
+              <span className="absolute top-1 right-1 w-4 h-4 bg-pink-500 rounded-full text-white text-[9px] font-bold flex items-center justify-center">
+                {unreadCount > 9 ? '9+' : unreadCount}
+              </span>
+            )}
+          </button>
+          <AnimatePresence>
+            {showNotifs && <NotificationPanel onClose={() => setShowNotifs(false)} />}
+          </AnimatePresence>
+        </div>
+
+        {/* Dark/light mode toggle */}
         <button
           onClick={() => setDarkMode(d => !d)}
           className="p-2 text-slate-400 hover:text-white hover:bg-white/5 rounded-full transition-colors"
         >
           {darkMode ? <Sun size={18} /> : <Moon size={18} />}
         </button>
+
+        {/* Profile button — shows user initial */}
         <button
           onClick={() => navigate('/profile')}
           className="flex items-center gap-2 pl-2 pr-3 py-1.5 glass-card rounded-full hover:border-purple-500/30 transition-all"
         >
-          <div className="w-7 h-7 rounded-full gradient-bg flex items-center justify-center">
-            <User size={14} className="text-white" />
+          <div className="w-7 h-7 rounded-full gradient-bg flex items-center justify-center text-xs font-bold text-white">
+            {avatarLetter}
           </div>
-          <span className="text-sm text-slate-300 hidden sm:block">Profile</span>
+          <span className="text-sm text-slate-300 hidden sm:block">
+            {currentUser?.name?.split(' ')[0] || 'Profile'}
+          </span>
         </button>
       </div>
     </header>
